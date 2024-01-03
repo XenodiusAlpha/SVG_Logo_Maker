@@ -14,7 +14,7 @@ class Shape {
 class Circle extends Shape {
     render(){
         // defines the shape of the svg circle to be returned.
-        return `<circle cx="80" cy="150" r="115" fill="${this.color}" />`;
+        return `<circle cx="150" cy="115" r="80" fill="${this.color}" />`;
     }
 }
 
