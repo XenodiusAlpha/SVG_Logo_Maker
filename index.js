@@ -2,6 +2,25 @@ const fs = require('fs');
 const inquirer = require('inquirer');
 const { Circle, Triangle, Square } = require('./shape/shapes');
 
+class Svg {
+    constructor() {
+        this.textEl = "";
+        this.shapeEl = "";
+    }
+    render() {
+        return `<svg width="300" height="200" xmlns="http://www.w3.org/2000/svg">
+        ${this.shapeEl}
+        ${this.textEl}
+        </svg>`;
+    }
+    setText(text, textColor){
+        this.textEl = `<text x="150" y="130" text-anchor="middle" font-size="60" fill="${textColor}">${text}</text>`;
+    }
+    setShape(shape){
+        this.shapeEl = shape.render();
+    }
+}
+
 function start() {
     inquirer
         .prompt([ 
@@ -51,9 +70,28 @@ function start() {
 
         ])
         .then(({shape, text, textColor, shapeColor}) => {
+            let answer = '';
 
-   
-    
+            if (shape === 'Circle') {
+                answer = new Circle();
+            } else if (shape === 'Triangle') {
+                answer = new Triangle();
+            } else {
+                answer = new Square();
+            }
+            
+            answer.setColor(shapeColor);
+            const svg = new Svg();
+            svg.setText(text, textColor);
+            svg.setShape(answer);
+            
+            fs.writeFile('logo.svg', svg.render(), (err) =>{
+                if (err) {
+                    console.log(err);
+                } else {
+                    console.log("SVG logo created successfully")
+                }
+                })
         })
     }
     
